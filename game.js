@@ -148,6 +148,8 @@ function renderCard(cardElement, value, suit) {
     cardElement.textContent = `${value}${symbolDict[suit]}`; // e.g., "7H"
     if (red_suits.includes(suit)) {
         cardElement.classList.add('red-card');
+    } else {
+        cardElement.classList.add('black-card');
     }
 }
 
@@ -435,7 +437,7 @@ function initialSetup() {
 }
 
 async function askName() {
-  const { value: username } = await Swal.fire({
+  const { value: name } = await Swal.fire({
     title: 'Welcome!',
     input: 'text',
     inputLabel: 'Please enter your name:',
@@ -454,8 +456,9 @@ async function askName() {
   });
 
   // Once user submits a valid name
-  if (username) {
-    Swal.fire(`Hello, ${username}!`);
+  if (name) {
+    Swal.fire(`Hello, ${name}!`);
+    username = name;
     // You can now store or use the name as needed
     sessionStorage.setItem('userName', username);
     displayUserName();
