@@ -414,7 +414,7 @@ function newGame() {
     playerHand = [];
     activeCard = [];
     discardedCards = [];
-    returns = [];
+    returns = 0;
     rewards = [];
     selectedPlayerCard = null;
     stateHistory = [];
