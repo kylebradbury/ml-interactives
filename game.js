@@ -193,7 +193,7 @@ function renderHistoryTable() {
 
     // ----- Create body rows -----
     const tbody = document.createElement("tbody");
-    stateHistory.reverse().forEach(rowData => {
+    stateHistory.slice().reverse().forEach(rowData => {
         const row = document.createElement("tr");
         const activeCardSpan = createCardSpan(rowData.activeCard);
         const playedCardSpan = createCardSpan(rowData.playedCard);
@@ -256,8 +256,17 @@ function selectCard(event) {
     const clickedCardIndex = parseInt(event.target.dataset.index);
     selectedPlayerCard = clickedCardIndex;
     event.target.classList.add('selected');
-    messageElement.textContent = `Selected: ${playerHand[selectedPlayerCard].value}${playerHand[selectedPlayerCard].suit[0]}`;
+    // messageElement.textContent = `Selected: ${playerHand[selectedPlayerCard].value}${playerHand[selectedPlayerCard].suit[0]}`;
     
+    let classLabel;
+    if (red_suits.includes(playerHand[selectedPlayerCard].suit)) {
+        classLabel = 'red-card';
+    } else {
+        classLabel = 'black-card';
+    }
+    messageElement.innerHTML = `Selected: <span class=${classLabel}>${playerHand[selectedPlayerCard].value}${symbolDict[playerHand[selectedPlayerCard].suit]}</span>`;
+
+
     playCardButton.disabled = false;
     discardCardButton.disabled = false;
 }
@@ -272,9 +281,15 @@ function playSelectedCard() {
     }
 
     const cardToPlay = playerHand.splice(selectedPlayerCard, 1)[0];
-
+    let classLabel;
     environmentResponseToAction("play", cardToPlay, activeCard)
-    messageElement.textContent = `You played: ${cardToPlay.value}${cardToPlay.suit[0]}`;
+    // messageElement.innerText = `You played: ${cardToPlay.value}${symbolDict[cardToPlay.suit]}`;
+    if (red_suits.includes(cardToPlay.suit)) {
+        classLabel = 'red-card';
+    } else {
+        classLabel = 'black-card';
+    }
+    messageElement.innerHTML = `You played: <span class=${classLabel}>${cardToPlay.value}${symbolDict[cardToPlay.suit]}</span>`;
 
     selectedPlayerCard = null; // Reset selection
     renderHand();
