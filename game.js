@@ -385,9 +385,9 @@ function environmentResponseToAction(actionType, playerCard, activeCard) {
         if (activeCard.value == playerCard.value) { // Play a matching-value face card
             reward = 20, dealCard = false,  flipCard = true;
         } else if (isFaceCard(playerCard) && (activeCard.suit == playerCard.suit)) { // Play a matching-suite face card
-            reward = 10, dealCard = false,  flipCard = true;
+            reward = 15, dealCard = false,  flipCard = true;
         } else if (isFaceCard(playerCard) && colorMatch(activeCard, playerCard)) { // Play a matching-color face card
-            reward = 5, dealCard = false,  flipCard = true;
+            reward = 10, dealCard = false,  flipCard = true;
         } else if (isFaceCard(playerCard)) { // Play a non-matching face card (no match for value or suite)
             reward = 3, dealCard = false,  flipCard = true;
         } else { // Play a numerical card
@@ -397,9 +397,9 @@ function environmentResponseToAction(actionType, playerCard, activeCard) {
         if (activeCard.value == playerCard.value) { // Play a matching-value numerical card
             reward = 20, dealCard = false,  flipCard = true;
         } else if (!isFaceCard(playerCard) && (activeCard.suit == playerCard.suit)) { // Play a matching-suite numerical card
-            reward = 10, dealCard = false,  flipCard = true;
+            reward = 15, dealCard = false,  flipCard = true;
         } else if (!isFaceCard(playerCard) && colorMatch(activeCard, playerCard)) { // Play a matching-color numerical card
-            reward = 5, dealCard = false,  flipCard = true;
+            reward = 10, dealCard = false,  flipCard = true;
         } else if (!isFaceCard(playerCard)) { // Play a non-matching numerical card - no match for value or suite
             reward = 3, dealCard = false,  flipCard = true;
         } else { // Play a face card
