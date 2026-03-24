@@ -8,6 +8,7 @@ const symbolDict = {
     Spades: '♠'
 }
 const red_suits = ['Hearts', 'Diamonds'];
+const black_suits = ['Clubs', 'Spades'];
 const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
 
 // Game elements
@@ -338,6 +339,15 @@ function isFaceCard(card) {
     }
 }
 
+function colorMatch(card1,card2) {
+    if (red_suits.includes(card1.suit) && red_suits.includes(card2.suit) ||
+        black_suits.includes(card1.suit) && black_suits.includes(card2.suit)) {
+            return true;
+    } else {
+        return false
+    }
+}
+
 function giveReward(value) {
     rewards.push(value);
     returns = rewards.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
@@ -373,31 +383,36 @@ function environmentResponseToAction(actionType, playerCard, activeCard) {
 
     if (isFaceCard(activeCard)) { // Active face card
         if (activeCard.value == playerCard.value) { // Play a matching-value face card
-            reward = 15, dealCard = false,  flipCard = true;
+            reward = 20, dealCard = false,  flipCard = true;
         } else if (isFaceCard(playerCard) && (activeCard.suit == playerCard.suit)) { // Play a matching-suite face card
-            reward = 7, dealCard = false,  flipCard = true;
-        } else if (isFaceCard(playerCard)) { // Play a non-matching face card (no match for value or suite)
+            reward = 10, dealCard = false,  flipCard = true;
+        } else if (isFaceCard(playerCard) && colorMatch(activeCard, playerCard)) { // Play a matching-color face card
             reward = 5, dealCard = false,  flipCard = true;
+        } else if (isFaceCard(playerCard)) { // Play a non-matching face card (no match for value or suite)
+            reward = 3, dealCard = false,  flipCard = true;
         } else { // Play a numerical card
-            reward = -10, dealCard = true,  flipCard = true;
+            reward = -15, dealCard = true,  flipCard = true;
         }
     } else { // Active numerical card
         if (activeCard.value == playerCard.value) { // Play a matching-value numerical card
-            reward = 15, dealCard = false,  flipCard = true;
+            reward = 20, dealCard = false,  flipCard = true;
         } else if (!isFaceCard(playerCard) && (activeCard.suit == playerCard.suit)) { // Play a matching-suite numerical card
-            reward = 7, dealCard = false,  flipCard = true;
-        } else if (!isFaceCard(playerCard)) { // Play a non-matching numerical card - no match for value or suite
+            reward = 10, dealCard = false,  flipCard = true;
+        } else if (!isFaceCard(playerCard) && colorMatch(activeCard, playerCard)) { // Play a matching-color numerical card
             reward = 5, dealCard = false,  flipCard = true;
+        } else if (!isFaceCard(playerCard)) { // Play a non-matching numerical card - no match for value or suite
+            reward = 3, dealCard = false,  flipCard = true;
         } else { // Play a face card
-            reward = -10, dealCard = true,  flipCard = true;
+            reward = -15, dealCard = true,  flipCard = true;
         }
     }
 
     if (actionType == "discard") {
         reward = -1, dealCard = true, flipCard = true;
-    } else if (actionType == "play" && playerCard.suit == 'Spades') {
-        reward = -20, dealCard = true,  flipCard = true;
     } 
+    // else if (actionType == "play" && playerCard.suit == 'Spades') {
+    //     reward = -20, dealCard = true,  flipCard = true;
+    // } 
 
     const instantaneousReward = giveReward(reward);
     discard(playerCard);
